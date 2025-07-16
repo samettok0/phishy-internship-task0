@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
     "username": "samedo",
-    "password": "sfefewf"
+    "password": "helloworld"
 }
 
 ###
@@ -15,6 +15,6 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "username": "",
-    "password": ""
-}
+    "username": "samedo",
+    "password": "helloworld"
+} 
