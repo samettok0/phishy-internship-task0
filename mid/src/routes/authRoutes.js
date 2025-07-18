@@ -19,7 +19,7 @@ router.post('/register', (req, res) => {
         insertTodo.run(result.lastInsertRowid, defaultTodo) // replaces above ? marks with actual values that has been passed to this function
 
         // create JWT token
-        const token = jwt.sign({ id: result.lastInsertRowid }, process.env.JWT_secret, { expiresIn: "24h" })
+        const token = jwt.sign({ id: result.lastInsertRowid }, process.env.JWT_SECRET, { expiresIn: "24h" })
         res.json({ token });
     } catch (error) {
         console.log(error.message);
@@ -51,7 +51,7 @@ router.post('/login', (req, res) => {
         }
 
         // if we didnt return anything from above code that means we are in
-        const token = jwt.sign({ id: user.id }, process.env.JWT_secret, { expiresIn: '24h' })
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' })
         res.json({ token });
     } catch (error) {
         console.log(error.message);

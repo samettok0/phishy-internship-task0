@@ -33,6 +33,13 @@ router.put('/:id', (req, res) => {
 
 // delete a todo
 router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+    const userId = req.userId;
+    const deleteTodo = db.prepare("DELETE FROM todos WHERE id = ? AND user_id = ?")
+    deleteTodo.run(id, userId);
+
+    res.send({message: "Deleted Successfully"})
+
 
 })
 
