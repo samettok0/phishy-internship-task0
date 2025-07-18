@@ -7,7 +7,7 @@ const fs = require('fs');
 const fsPromises = require('fs').promises;
 
 let data = {
-    name: "HASSANSABBAH"
+    name: "samet"
 }
 
 

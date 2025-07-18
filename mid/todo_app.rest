@@ -6,7 +6,7 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "username": "samedo",
+    "username": "samedo@gmail.com",
     "password": "helloworld"
 }
 
@@ -18,3 +18,16 @@ Content-Type: application/json
     "username": "samedo",
     "password": "helloworld"
 } 
+
+
+### GET ALL TODOS (Protected)
+GET http://localhost:3000/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUyODM0Njg5LCJleHAiOjE3NTI5MjEwODl9.VSqfMSQ4uCuR3AEpICt2qw2xVYqSYF53STFkB6e4MWo
+
+### PUSH A TODO (Protected)
+POST http://localhost:3000/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUyODM0Njg5LCJleHAiOjE3NTI5MjEwODl9.VSqfMSQ4uCuR3AEpICt2qw2xVYqSYF53STFkB6e4MWo
+Content-Type: application/json
+{
+    "task": "Arabayi al ve sür"
+}
