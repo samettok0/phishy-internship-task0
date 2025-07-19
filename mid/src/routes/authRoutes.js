@@ -2,22 +2,31 @@ import express from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import db from '../db.js'
+import prisma from '../prismaClient.js'
 
 const router = express.Router();
 
 // register a new user endpoint at /auth/register
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
     const { username, password } = req.body;
     const hashed = bcrypt.hashSync(password, 8);
 
     try {
-        const insertUser = db.prepare(`INSERT INTO users (username, password) VALUES (?,?)`);
-        const result = insertUser.run(username, hashed);
+        const user = await prisma.user.create({
+            data: {
+                username,
+                password: hashedPassword
+            }
+        })
 
         const defaultTodo = "Hello! This is your first todo!"
-        const insertTodo = db.prepare(`INSERT INTO todos (user_id, task) VALUES (?,?)`) // template sql script
-        insertTodo.run(result.lastInsertRowid, defaultTodo) // replaces above ? marks with actual values that has been passed to this function
-
+        await prisma.todo.create({
+            data: {
+                task: defaultTodo,
+                id: user.id
+            }
+        })
+       
         // create JWT token
         const token = jwt.sign({ id: result.lastInsertRowid }, process.env.JWT_SECRET, { expiresIn: "24h" })
         res.json({ token });
@@ -29,12 +38,15 @@ router.post('/register', (req, res) => {
 
 })
 // login a new user endpoint at /auth/login
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const getUser = db.prepare('SELECT * FROM users WHERE username = ?'); // fetches the whole row where username == ?
-        const user = getUser.get(username); // get the 'username' row by calling get from getUser 
+        const user = await prisma.user.findUnique({
+            where: {
+                username: username
+            }
+        })
 
         // if user not found = its null
         if (!user) {

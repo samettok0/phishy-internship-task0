@@ -1,46 +1,55 @@
 import express from 'express'
-import db from '../db.js'
+import prisma from '../prismaClient.js';
 
 const router = express.Router();
 
 // get all todos from logged in user
-router.get('/', (req, res) => {
-    const getTodos = db.prepare("SELECT * FROM todos WHERE user_id = ?");
-    const todos = getTodos.all(req.userId);
+router.get('/', async (req, res) => {
+    const todos = await prisma.todo.findMany({
+        where: {
+            userId: req.userId
+        }
+    })
     res.json(todos);
 })
 
 // create a new todo
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { task } = req.body;
-    const insertTodo = db.prepare('INSERT INTO todos (user_id, task) VALUES (?,?)')
-    const result = insertTodo.run(req.userId, task);
+
+    const todo = await prisma.todo.create({
+        data: {
+            task,
+            userId: req.userId
+        }
+    })
 
     res.json({ id: result.lastInsertRowid, task, completed: 0 });
 })
 
 // update a todo
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const { completed } = req.body;
     const { id } = req.params // params takes you to access id via /:id
-    const { page } = req.query
 
-    const updatedTodo = db.prepare("UPDATE todos SET completed = ? WHERE id = ?")
+    const updatedTodo = await prisma.todo.update({
+        where: {
+            id: parseInt(id), // if todo's own id matches where it passed from url /
+            userId: req.userId // and user id matches
+        },
+        data: {
+            completed: Boolean(completed)
+        }
+    })
 
-    updatedTodo.run(completed, id)
     res.json({ message: "Todo completed" })
 })
 
 // delete a todo
-router.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    const userId = req.userId;
-    const deleteTodo = db.prepare("DELETE FROM todos WHERE id = ? AND user_id = ?")
-    deleteTodo.run(id, userId);
-
-    res.send({message: "Deleted Successfully"})
-
-
+router.delete('/:id', await (req, res) => {
+    const { id } = req.params
+    const userId = req.userId
+    res.send({ message: "Deleted Successfully" })
 })
 
 export default router

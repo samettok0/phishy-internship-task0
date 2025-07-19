@@ -1,7 +1,7 @@
 {
   "name": "chap3",
   "version": "1.0.0",
-  "main": "index.js", 
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,8 +12,11 @@
   "license": "ISC",
   "description": "fullstack todo that uses node.js backend a SQLite db and JWT auth",
   "dependencies": {
+    "@prisma/client": "^6.12.0",
     "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "prisma": "^6.12.0"
   }
 }
