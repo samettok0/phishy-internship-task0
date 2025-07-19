@@ -1,116 +1,122 @@
 # Todo Application
 
-A fullstack todo application built with Node.js backend, SQLite database, and JWT authentication.
+A full-stack Todo application with user authentication, built with modern web technologies.
 
 ## Features
 
-- User authentication (register/login) with JWT tokens
+- User authentication (register and login)
 - Create, read, update, and delete todos
 - Mark todos as completed
-- Filter todos by status (All, Open, Complete)
-- In-memory SQLite database
-- RESTful API endpoints
-- Simple and responsive frontend interface
+- Secure API endpoints with JWT authentication
+- Containerized application with Docker
 
-## Technology Stack
+## Tech Stack
 
+- **Frontend**: HTML, CSS
 - **Backend**: Node.js, Express.js
-- **Database**: SQLite (in-memory)
-- **Authentication**: JWT (JSON Web Tokens), bcryptjs
-- **Frontend**: HTML, CSS, JavaScript
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Authentication**: JWT, bcrypt
+- **Containerization**: Docker, Docker Compose
+
+## Prerequisites
+
+- Node.js (v14 or later)
+- Docker and Docker Compose
+- PostgreSQL (if running without Docker)
+
+## Installation and Setup
+
+### Using Docker (Recommended)
+
+1. Clone the repository
+2. Navigate to the project directory
+3. Start the application using Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+The application will be available at http://localhost:3000
+
+### Manual Setup
+
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up your environment variables in a `.env` file:
+
+```
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/todoapp
+JWT_SECRET=your_jwt_secret_here
+PORT=3000
+```
+
+4. Run database migrations:
+
+```bash
+npx prisma migrate dev
+```
+
+5. Start the application:
+
+```bash
+npm start
+```
 
 ## API Endpoints
 
 ### Authentication
 
-- `POST /auth/register` - Register a new user
-  - Body: `{ "username": "example@email.com", "password": "password" }`
-  - Response: `{ "token": "jwt-token" }`
+- **POST /auth/register** - Register a new user
+  - Request body: `{ "username": "user", "password": "pass" }`
+  - Response: `{ "token": "jwt_token" }`
 
-- `POST /auth/login` - Login a user
-  - Body: `{ "username": "example@email.com", "password": "password" }`
-  - Response: `{ "token": "jwt-token" }`
+- **POST /auth/login** - Login an existing user
+  - Request body: `{ "username": "user", "password": "pass" }`
+  - Response: `{ "token": "jwt_token" }`
 
-### Todo Operations (Protected Routes)
+### Todos
 
-- `GET /todos` - Get all todos for the logged-in user
-  - Header: `Authorization: jwt-token`
-  - Response: Array of todo objects
+All todo endpoints require authentication. Include the JWT token in the Authorization header.
 
-- `POST /todos` - Create a new todo
-  - Header: `Authorization: jwt-token`
-  - Body: `{ "task": "Task description" }`
-  - Response: The created todo object
+- **GET /todos** - Get all todos for the authenticated user
+  - Response: `[{ "id": 1, "task": "Todo item", "completed": false }]`
 
-- `PUT /todos/:id` - Update a todo (mark as completed)
-  - Header: `Authorization: jwt-token`
-  - Body: `{ "completed": 1 }`
+- **POST /todos** - Create a new todo
+  - Request body: `{ "task": "New todo" }`
+  - Response: `{ "id": 2, "task": "New todo", "completed": false }`
+
+- **PUT /todos/:id** - Update a todo's completion status
+  - Request body: `{ "completed": true }`
   - Response: `{ "message": "Todo completed" }`
 
-- `DELETE /todos/:id` - Delete a todo
-  - Header: `Authorization: jwt-token`
+- **DELETE /todos/:id** - Delete a todo
   - Response: `{ "message": "Deleted Successfully" }`
 
-## Getting Started
+## Database Schema
 
-### Prerequisites
+### User Model
+- id (Integer, Primary Key)
+- username (String, Unique)
+- password (String, Hashed)
 
-- Node.js (v14 or higher)
+### Todo Model
+- id (Integer, Primary Key)
+- task (String)
+- completed (Boolean, default: false)
+- userId (Integer, Foreign Key to User)
 
-### Installation
+## Development
 
-1. Clone the repository
-   ```
-   git clone <repository-url>
-   cd mid
-   ```
+To run the application in development mode:
 
-2. Install dependencies
-   ```
-   npm install
-   ```
-
-3. Create a `.env` file with the following content
-   ```
-   JWT_SECRET=your_secret_key_here
-   PORT=3000
-   ```
-
-4. Start the development server
-   ```
-   npm run dev
-   ```
-
-5. Open your browser and navigate to `http://localhost:3000`
-
-## Project Structure
-
+```bash
+docker-compose up
 ```
-mid/
-├── public/                # Frontend static files
-│   ├── index.html         # Main HTML file
-│   ├── styles.css         # Main CSS file
-│   └── fanta.css          # Additional CSS
-├── src/
-│   ├── middleware/
-│   │   └── authMiddleware.js  # JWT authentication middleware
-│   ├── routes/
-│   │   ├── authRoutes.js      # Authentication routes
-│   │   └── todoRoutes.js      # Todo CRUD operations
-│   ├── db.js              # Database configuration
-│   └── server.js          # Express server setup
-├── package.json          # Project dependencies
-└── todo_app.rest         # REST API test file
-```
-
-## Notes
-
-- The application uses an in-memory SQLite database, so data will be lost when the server restarts
-- The frontend interacts with the backend through RESTful API calls
-- JWT tokens expire after 24 hours
-
-## License
-
-This project is licensed under the ISC License.
 
 
