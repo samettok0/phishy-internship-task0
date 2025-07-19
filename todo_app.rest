@@ -1,0 +1,48 @@
+### GET /
+GET http://localhost:3000
+
+### Register
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "username": "samedo@gmail.com",
+    "password": "helloworld"
+}
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "samedo",
+    "password": "helloworld"
+} 
+
+
+### GET ALL TODOS (Protected)
+GET http://localhost:3000/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUyODUyODY3LCJleHAiOjE3NTI5MzkyNjd9.V2PD7t60VlnyfBz7g9um3DJgRzOhN2zO2OWb6VCTajY
+### PUSH A TODO (Protected)
+POST http://localhost:3000/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUyODUyODY3LCJleHAiOjE3NTI5MzkyNjd9.V2PD7t60VlnyfBz7g9um3DJgRzOhN2zO2OWb6VCTajY
+Content-Type: application/json
+
+{
+    "task": "Arabayi al ve sür"
+}
+
+### Update a todo PUT /TODOS/:ID (protected) 
+PUT http://localhost:3000/todos/2?page=4 
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUyODUyODY3LCJleHAiOjE3NTI5MzkyNjd9.V2PD7t60VlnyfBz7g9um3DJgRzOhN2zO2OWb6VCTajY
+Content-Type: application/json
+
+{
+    "completed": 1
+
+}
+
+
+### delete a todo DELETE /TODOS/:ID (protected) 
+DELETE  http://localhost:3000/todos/2?page=4 
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUyODUyODY3LCJleHAiOjE3NTI5MzkyNjd9.V2PD7t60VlnyfBz7g9um3DJgRzOhN2zO2OWb6VCTajY
