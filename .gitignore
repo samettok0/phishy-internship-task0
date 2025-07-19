@@ -26,4 +26,5 @@ build/
 # VSCode
 .vscode/
 
-*.rest
+.rest
+/generated/prisma
